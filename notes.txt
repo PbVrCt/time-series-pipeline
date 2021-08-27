@@ -1,0 +1,85 @@
+
+My data engineering workflow for this project:
+
+0) Download Ohclv and Fndmt
+
+1) Data exploration
+
+2) Automated data validation
+
+3) Preprocessing for Ohlcv and Fndmt : Drop duplicate index -> Drop features/stocks with Nans -> Infs to Nans -> Forward filling -> Feature engineering -> Validate engineered features
+
+41) Cluster stocks based on returns in order to possibly create different models for different clusters at the end
+
+42) Merge non-standarized data sources for feature engineering 
+
+5) Feature and Label engineering
+
+6) Standarize features -> Do the final merge -> Trim dates -> Replace remaining Nans for 0s
+
+7) Split in train-val-test sets -> Prune (Trim sets) to avoid label overlap -> Balance classes -> Sort by date -> Split in features and labels -> To numpy format
+
+8) Train different models : Neural network, Random Forest, Support Vector Classifier
+
+____________________________________________
+
+       0                    1                      2                        3                           4                         5                                      6                             7          8  
+
+Download Fndmt -> (Manual exploration) -> Initial validation -> Cleansing, Feature engineering ->  ----------   ->  ---------------------------   ->                                                          -> SVM 
+
+                                                                                               -> Merge sources -> Cleansing, Feature engineering -> Standarize, Merging, Final Preprocessing ->  Splits sets -> NN
+
+Download Ohlcv -> (Manual exploration) -> Initial validation -> Cleansing, Feature engineering ->                                                                                                             -> RF
+
+                                                                                               -> Cluster stocks                                                                                                                                                
+____________________________________________
+
+Notes on label engineering:
+
+- The time horizon of the labels is based on the current volatility of the prices.
+      They are generated using a method taken from Marcos´s Lopez de Prado book "Advances in Financial Machine Learning" 
+      (specifically from Chapter 3) which he coins the "triple barrier method"; 
+      it attemps to simulate real stop-losses and profit-taking.
+
+- The technique to remove label overlap is also from "Advances in financial Machine Learning" (Chapter 7).
+____________________________________________
+
+Notes on standarization and forward filling:
+
+-The standarization of fundamental features is done before the final merging of data sources because of these considerations: 
+      The market and fundamental datasets have different index values (dates), and so they are merged on the market dates 
+      using pandas´ 'merge_asof' method because the fundamental data is sparse compared to the market data. 'merge_asof' by default
+      forward fills fundamental data on the market dates index. Forward filling is used with time series data to avoid data leakeage.
+      A rolling window standarization is also often used when working with time series data instead of standarizing across all values to avoid data leakage.
+      In this case, if a rolling window standarization of the fundamental features were to be done after and not before forward filling them
+      on the market dates index by using of 'merge_asof', then the rolling window standarization would be biased by the forward filling
+
+- Most of the features to be engineered, which are taken from fundamental or technical analysis literature, are to be engineered before 
+  standarizing the features they are engineered/extracted from
+
+- The reason the 2 data sources are merged and then feature engineering is done, and then datasets are merged again, is because:    
+      Some features are created/engineered using various features from both market and fundamental data. 
+      Both sources have to be merged in order to engineer said features.
+      However, as mentioned in the previous point, these features are to be engineered before standarizing the features that they come from,
+      and at the same time, as mentioned in the first point, the standarization of fundamental data is done before the final merging
+      (because a rolling window standarization is used and at the same time when merging the fundamental data is forward filled on the market data index)
+
+- Most technical indicators are already normalized in some way by design
+
+- The random forest does not need standarized data
+____________________________________________
+
+Mermaid flowchart:
+
+graph TD
+    A[Download ohlcv] & B[Download fundamentals] --> C([Data Exploration]) 
+    C --> D[Data validation]
+    D --> E[Cleansing & feature engineering ohlcv] & F[Cleansing & feature engineering fundamentals]
+    E & F --> G["Merge non standarized sources on the ohlcv<br> index (forward filling) in order to engineer<br> features from mixed data sources"]
+    E -.-> H(["Cluster stocks <br> based  on returns <br>(using PCA and Kmeans)<br> to train models<br> on each cluster separately"]) -.-> K
+    G --> I[Cleansing, feature & label engineering]
+    I & F --> |Rolling window standarization| J["Merge non-forward-filled-but-standarized <br> fundamentals on the ohlcv index (forward filling)"]
+    J --> |Trim initial dates<br>Replace remaining Nans for 0s| K[Split sets: Train,val,test<br> Trim sets based on label overlap<br> Balance classes by undersampling]
+    K --> M["Feed the data to different algorithms:<br>NN, Random Forest, SVM"]
+    M --- N>Note: The RF does not need standarization]
+    M ---> |Hyperparameter optimization| O([Test the final model])

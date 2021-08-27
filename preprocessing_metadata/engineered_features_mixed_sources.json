@@ -1,0 +1,13 @@
+{
+    "EngineeredFeatures": [
+        "Label",
+        "EnterpriseValue",
+        "EVbyRevenue",
+        "PriceToBookRatio",
+        "MarketCap",
+        "PriceToEarnings",
+        "Label_t1",
+        "EVbyEBIT",
+        "PriceByFreeCF"
+    ]
+}

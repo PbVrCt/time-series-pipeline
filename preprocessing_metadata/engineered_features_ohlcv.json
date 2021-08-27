@@ -1,0 +1,27 @@
+{
+    "EngineeredFeatures": [
+        "%D",
+        "EMV",
+        "Adjusted_close_zscore",
+        "RSI",
+        "MACD",
+        "SMA_zscore",
+        "ROC",
+        "%K",
+        "EMA_zscore",
+        "TEMA_zscore",
+        "WILLSR",
+        "WMA_zscore",
+        "CHKVLT_zscore",
+        "CHKOSC",
+        "MSSINDX",
+        "ULTOSC",
+        "OBV_zscore",
+        "AROON_DOWN",
+        "FINDX_zscore",
+        "VOL",
+        "CCI",
+        "Returns",
+        "AROON_UP"
+    ]
+}

@@ -1,0 +1,17 @@
+__pycache__
+.history
+.vscode
+venv
+
+Keras_tuner_metadata/*/**
+TensorBoard_logs/data/**
+0_raw data/**
+1_processed data/**
+2_final data/**
+
+great_expectations/ge edit_expectations.ipynb
+great_expectations/ge set run checkpoints.ipynb
+snippets.txt
+
+*.html
+!.gitkeep

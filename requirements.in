@@ -1,0 +1,11 @@
+# requirements.in
+tensorflow
+tensorboard
+keras-tuner
+scikit-learn
+great-expectations
+pandas
+numpy
+sweetviz
+matplotlib
+ipykernel
