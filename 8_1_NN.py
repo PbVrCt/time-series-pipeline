@@ -54,8 +54,10 @@ class MyTuner(kt.BayesianOptimization):
 hp = kt.HyperParameters()
 hp.Fixed("clipnorm", value=1)
 hp.Fixed("clipvalue", value=0.5)
-# hp.Fixed('learning_rate',value=5e-6)
-hp.Fixed("patience", value=10)
+hp.Fixed("batchnorm", value=True)
+hp.Fixed("hidden_activation", value="relu")
+hp.Fixed("optimizer", value="adam")
+hp.Fixed("patience", value=100)
 tuner = MyTuner(
     hypermodel=hypermodel,
     hyperparameters=hp,
@@ -71,7 +73,7 @@ tuner.search(
     train_labels,
     epochs=30,
     validation_data=(val_features, val_labels),
-    batch_size=32,
+    # batch_size=32,
     verbose=0,
     use_multiprocessing=True,
 )
