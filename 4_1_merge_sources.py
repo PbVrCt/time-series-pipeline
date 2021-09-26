@@ -28,7 +28,7 @@ df = pd.merge_asof(
 )
 df = df.sort_values(["Stock", "Date"]).set_index(["Stock", "Date"])
 
-# TODO Some more automated data validation might be needed here, because for some stocks there might be a lot of ohlcv data but not fundamental data
+# Some more automated data validation might be needed here, because for some stocks there might be a lot of ohlcv data but not fundamental data
 
 # Check for Nans after forward filling the fundamental data on the ohlcv data
 print("After the first merge (merge_asof):", df.isnull().sum().sum(), " Nans")

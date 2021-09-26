@@ -3,8 +3,6 @@ from tensorflow import keras as k
 from keras_tuner import HyperModel
 from matplotlib import pyplot as plt
 
-# TODO Keep tuning using Keras Tuner and TensorBoard
-
 
 class NNmodel(HyperModel):
     def __init__(self, input_shape, num_classes):
@@ -165,7 +163,3 @@ def plotHistory(history):
     ax2.set_title("CategoricalAcurracy")
     plt.legend()
     plt.show()
-
-
-# TODO Define custom metrics for one-hot-encoded predictions and labels like in this example:
-# recall, precission, f1, precission at recall, specifity at sensitivity, auc of the roc curve, ...

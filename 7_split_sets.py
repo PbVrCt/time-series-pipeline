@@ -58,7 +58,7 @@ def prune(df):
 
 
 tr_val = df.copy(deep=True)
-# TODO Did not prune the train+val set so that the labels don't overlap with the test set, but this is ok for now
+# Did not prune the train+val set so that the labels don't overlap with the test set, but this is ok for now
 tr_val = tr_val.loc[(tr_val["Set"] == "Train") | (tr_val["Set"] == "Validation")].drop(
     ["Label_t1", "Set"], axis=1
 )
@@ -66,7 +66,7 @@ df = df.groupby(by="Stock").apply(prune)
 train = df.loc[df["Set"] == "Train"].drop(["Label_t1", "Set"], axis=1)
 val = df.loc[df["Set"] == "Validation"].drop(["Label_t1", "Set"], axis=1)
 test = df.loc[df["Set"] == "Test"].drop(["Label_t1", "Set"], axis=1)
-# TODO? After splitting, trim/prune sets that have instances that are standarized on rolling windows that overlap with other sets
+# After splitting, trim/prune sets that have instances that are standarized on rolling windows that overlap with other sets?
 # Balance classes by undersampling
 print("********* Before undersampling")
 print("Train set:", train.value_counts("Label"))
