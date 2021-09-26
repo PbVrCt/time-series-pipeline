@@ -4,6 +4,8 @@ This project consists of a pipeline where:
 2. Preprocessing is done on the data
 3. The data is fed to ML algorithms to create time series forecasting classification models that attemp to predict the direction of stock prices. 
 
+Update: I did not achieve any significant results predicting stock prices with this pipeline, so it might not be worth your time trying to use this for your own purposes
+
 # Usage
 
 ### Setup
